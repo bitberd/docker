@@ -25,7 +25,7 @@ RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Europe/Bucharest /etc/localtime
 
 # ports
-EXPOSE 80 443
+EXPOSE 80 443 9000
 
 # setup logs and folders
 RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html
@@ -90,10 +90,10 @@ ENTRYPOINT ${HOME_DIR}/run.sh
 # docker build -t perfectweb/development .
 
 # run
-# docker run -dit -p 80:80 -v $HOME/.ssh:/root/.ssh -v $HOME/Web/html:/var/www/html --name=development perfectweb/development
+# docker run -dit -p 80:80 -p 9000:9000 -v $HOME/.ssh:/root/.ssh -v $HOME/Web/html:/var/www/html --name=development perfectweb/development
 
 # run & attach
-# docker run -dit -p 80:80 -v $HOME/.ssh:/root/.ssh -v $HOME/Web/html:/var/www/html --name=development perfectweb/development; docker attach development
+# docker run -dit -p 80:80 -p 9000:9000 -v $HOME/.ssh:/root/.ssh -v $HOME/Web/html:/var/www/html --name=development perfectweb/development; docker attach development
 
 # clean start
 # docker rm -f development; docker rmi perfectweb/development
