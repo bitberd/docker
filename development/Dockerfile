@@ -13,6 +13,7 @@ RUN apt-get -y --force-yes dist-upgrade
 RUN apt-get -y --force-yes install locate telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
 
 # variables setup
+ENV APPLICATION_ENV development
 ENV PHP_INI /etc/php5/cli/php.ini
 ENV NGINX_CONF /etc/nginx/conf.d/vhost.conf
 ENV FPM_POOL_CONF /etc/php5/fpm/pool.d/www.conf
@@ -81,7 +82,7 @@ RUN echo 'include        fastcgi_params;' >> ${NGINX_CONF}
 RUN echo 'fastcgi_param  APPLICATION_ENV development;' >> ${NGINX_CONF}
 RUN echo '}}' >> ${NGINX_CONF}
 
-RUN echo ' service nginx restart \n service php5-fpm restart \n service redis-server restart \n tail -f logs/php.log & /bin/bash' > ${HOME_DIR}/run.sh
+RUN echo ' service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n tail -f logs/* & /bin/bash' > ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
 
 ENTRYPOINT ${HOME_DIR}/run.sh
