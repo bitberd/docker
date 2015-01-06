@@ -41,7 +41,7 @@ RUN ln -s ${PHP_INI} /etc/php5/fpm/php.ini
 RUN sed -i.bak "s|error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i.bak 's/short_open_tag = Off/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/Bucharest\"/g' ${PHP_INI}
-RUN sed -i.bak 's/allow_url_fopen = On/allow_url_fopen = Off/g' ${PHP_INI}
+#RUN sed -i.bak 's/allow_url_fopen = On/allow_url_fopen = Off/g' ${PHP_INI}
 RUN sed -i.bak 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
 RUN sed -i.bak 's/display_errors = Off/display_errors = On/g' ${PHP_INI}
@@ -81,7 +81,7 @@ RUN echo 'include        fastcgi_params;' >> ${NGINX_CONF}
 RUN echo 'fastcgi_param  APPLICATION_ENV development;' >> ${NGINX_CONF}
 RUN echo '}}' >> ${NGINX_CONF}
 
-RUN echo ' service nginx restart \n service php5-fpm restart \n service redis-server restart \n /bin/bash & tail -f logs/php.log' > ${HOME_DIR}/run.sh
+RUN echo ' service nginx restart \n service php5-fpm restart \n service redis-server restart \n tail -f logs/php.log & /bin/bash' > ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
 
 ENTRYPOINT ${HOME_DIR}/run.sh
