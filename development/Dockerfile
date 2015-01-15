@@ -10,7 +10,7 @@ RUN add-apt-repository -y ppa:ondrej/php5-5.6
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install ffmpeg ffmpeg-devel git locate npm telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
+RUN apt-get -y --force-yes install ffmpeg ffmpeg-devel git locate nodejs npm telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
 RUN npm install -g bower
 
 # variables setup
@@ -36,6 +36,7 @@ RUN > ${HOME_DIR}/logs/php.log
 RUN chown www-data:www-data ${LOGS_DIR}/php.log
 RUN ln -s /var/log/nginx/error.log ${LOGS_DIR}/nginx.error.log
 RUN ln -s /var/log/nginx/access.log ${LOGS_DIR}/nginx.access.log
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # php setup
 RUN rm /etc/php5/fpm/php.ini
