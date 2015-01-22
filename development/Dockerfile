@@ -11,9 +11,11 @@ RUN add-apt-repository -y ppa:ondrej/php5-5.6
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install locate telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
+RUN apt-get -y --force-yes install ffmpeg ffmpeg-devel git locate nodejs npm telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
+RUN npm install -g bower
 
 # variables setup
+ENV APPLICATION_ENV development
 ENV PHP_INI /etc/php5/cli/php.ini
 ENV NGINX_CONF /etc/nginx/conf.d/vhost.conf
 ENV FPM_POOL_CONF /etc/php5/fpm/pool.d/www.conf
@@ -35,6 +37,7 @@ RUN > ${HOME_DIR}/logs/php.log
 RUN chown www-data:www-data ${LOGS_DIR}/php.log
 RUN ln -s /var/log/nginx/error.log ${LOGS_DIR}/nginx.error.log
 RUN ln -s /var/log/nginx/access.log ${LOGS_DIR}/nginx.access.log
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # php setup
 RUN rm /etc/php5/fpm/php.ini
@@ -42,7 +45,7 @@ RUN ln -s ${PHP_INI} /etc/php5/fpm/php.ini
 RUN sed -i.bak "s|error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i.bak 's/short_open_tag = Off/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/Bucharest\"/g' ${PHP_INI}
-RUN sed -i.bak 's/allow_url_fopen = On/allow_url_fopen = Off/g' ${PHP_INI}
+#RUN sed -i.bak 's/allow_url_fopen = On/allow_url_fopen = Off/g' ${PHP_INI}
 RUN sed -i.bak 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
 RUN sed -i.bak 's/display_errors = Off/display_errors = On/g' ${PHP_INI}
@@ -82,7 +85,7 @@ RUN echo 'include        fastcgi_params;' >> ${NGINX_CONF}
 RUN echo 'fastcgi_param  APPLICATION_ENV development;' >> ${NGINX_CONF}
 RUN echo '}}' >> ${NGINX_CONF}
 
-RUN echo ' service nginx restart \n service php5-fpm restart \n service redis-server restart \n /bin/bash & tail -f logs/php.log' > ${HOME_DIR}/run.sh
+RUN echo ' service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n tail -f logs/* & /bin/bash' > ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
 
 ENTRYPOINT ${HOME_DIR}/run.sh
