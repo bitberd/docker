@@ -5,11 +5,10 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 ENV BUILD 1.0.12566
 ENV SOURCE /usr/local/upsource
 ENV BIN ${SOURCE}/bin/upsource.sh
-ENV PORT 1111
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install htop nano postfix openjdk-7-jdk unzip wget
+RUN apt-get -y --force-yes install openjdk-7-jdk unzip wget
 
 WORKDIR /root
 RUN rm /etc/localtime
@@ -23,7 +22,7 @@ RUN unzip upsource-${BUILD}.zip
 RUN rm -f upsource-${BUILD}.zip
 RUN mv Upsource ${SOURCE}
 
-RUN ${BIN} configure --listen-port ${PORT}
+RUN ${BIN} configure --listen-port 1111
 
 ENTRYPOINT ${BIN} start
 
