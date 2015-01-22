@@ -6,6 +6,7 @@ ENV BUILD 1.0.12566
 ENV SOURCE /usr/local/upsource
 ENV BIN ${SOURCE}/bin/upsource.sh
 ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
+ENV hostname localhost
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
@@ -26,7 +27,9 @@ RUN mv Upsource ${SOURCE}
 
 RUN ${BIN} configure --listen-port 1111
 
-ENTRYPOINT ${BIN} start
+WORKDIR ${SOURCE}
+
+ENTRYPOINT ${BIN} start & tail -f /usr/local/upsource/logs/bundleProcess/*
 
 # clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -35,4 +38,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 # docker build -t perfectweb/upsource .
 
 # run
-# docker run -dit -p 1111:1111 --name=source perfectweb/upsource
+# docker run -dit -p 1111:1111 --name=upsource perfectweb/upsource
