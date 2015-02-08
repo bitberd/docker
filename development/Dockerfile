@@ -23,7 +23,7 @@ RUN wget -O /usr/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.pha
 RUN chmod +x /usr/bin/phpcs
 RUN wget -O /usr/bin/phpcbf https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
 RUN chmod +x /usr/bin/phpcbf
-RUN wget -O /usr/bin/phpmd https://raw.githubusercontent.com/phpmd/phpmd/master/src/bin/phpmd
+RUN wget -O /usr/bin/phpmd http://static.phpmd.org/php/2.2.0/phpmd.phar
 RUN chmod +x /usr/bin/phpmd
 RUN wget -O /usr/bin/phing http://www.phing.info/get/phing-latest.phar
 RUN chmod +x /usr/bin/phing
