@@ -13,6 +13,20 @@ RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
 RUN apt-get -y --force-yes install ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client nginx redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix phpunit*
 RUN npm install -g bower
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/
+RUN chmod +x /usr/bin/composer
+RUN wget -O /usr/bin/behat https://github.com/downloads/Behat/Behat/behat.phar
+RUN chmod +x /usr/bin/behat
+RUN wget -O /usr/bin/phpunit https://phar.phpunit.de/phpunit.phar
+RUN chmod +x /usr/bin/phpunit
+RUN wget -O /usr/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+RUN chmod +x /usr/bin/phpcs
+RUN wget -O /usr/bin/phpcbf https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+RUN chmod +x /usr/bin/phpcbf
+RUN wget -O /usr/bin/phpmd https://raw.githubusercontent.com/phpmd/phpmd/master/src/bin/phpmd
+RUN chmod +x /usr/bin/phpmd
+RUN wget -O /usr/bin/phing http://www.phing.info/get/phing-latest.phar
+RUN chmod +x /usr/bin/phing
 
 # variables setup
 ENV APPLICATION_ENV development
