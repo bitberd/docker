@@ -43,7 +43,7 @@ RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Europe/Bucharest /etc/localtime
 
 # ports
-EXPOSE 80 443 9000
+EXPOSE 80 443
 
 # setup logs and folders
 RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html
@@ -60,7 +60,7 @@ RUN sed -i.bak "s|error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" /etc/ph
 RUN sed -i.bak 's/short_open_tag = Off/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/Bucharest\"/g' ${PHP_INI}
 #RUN sed -i.bak 's/allow_url_fopen = On/allow_url_fopen = Off/g' ${PHP_INI}
-RUN sed -i.bak 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' ${PHP_INI}
+RUN sed -i.bak 's/upload_max_filesize = 2M/upload_max_filesize = 4000M/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
 RUN sed -i.bak 's/display_errors = Off/display_errors = On/g' ${PHP_INI}
 RUN sed -i.bak 's/display_startup_errors = Off/display_startup_errors = On/g' ${PHP_INI}
@@ -68,7 +68,7 @@ RUN sed -i.bak 's/error_reporting =\(.*\)/error_reporting = E_ALL \& ~E_DEPRECAT
 RUN sed -i.bak 's/short_open_tag = Off/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_prepend_string =\(.*\)/error_prepend_string = \"<pre>\"/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_append_string =\(.*\)/error_append_string = \"<\/pre>\"/g' ${PHP_INI}
-RUN sed -i.bak 's/post_max_size =\(.*\)/post_max_size = 200M/g' ${PHP_INI}
+RUN sed -i.bak 's/post_max_size =\(.*\)/post_max_size = 4000M/g' ${PHP_INI}
 
 # some php extension changes
 RUN echo 'apc.enabled=0' >> /etc/php5/mods-available/apcu.ini
