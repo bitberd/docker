@@ -16,12 +16,13 @@ ENV MAX_UPLOAD 4000M
 
 # add repositories
 RUN apt-get -y install software-properties-common
+RUN add-apt-repository -y ppa:nginx/stable
 RUN add-apt-repository -y ppa:mc3man/trusty-media
 RUN add-apt-repository -y ppa:ondrej/php5-5.6
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install gcc unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
+RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN npm install -g bower forever
 
@@ -89,15 +90,15 @@ RUN sed -i.bak "s|\;access\.log = log|access\.log = ${LOGS_DIR}|g" ${FPM_POOL_CO
 RUN wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
 RUN tar xvf ngx_openresty-1.7.10.1.tar.gz; unzip master.zip; unzip replace.zip
 RUN cd sregex-master; make; make install
-RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=www-data --group=www-data --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master
+RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=www-data --group=www-data --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
 RUN cd ngx_openresty-1.7.10.1; make; make install
 RUN rm -fr ngx_openresty-1.7.10.1.tar.gz master.zip replace.zip ngx_openresty-1.7.10.1 sregex-master replace-filter-nginx-module-master
 
-RUN echo 'user www-data; worker_processes  auto; error_log  ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log main; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/conf.d/*.conf; }' > /etc/nginx/nginx.conf
-RUN mkdir /etc/nginx/conf.d; chown www-data:www-data /etc/nginx/conf.d
+RUN echo "user www-data; worker_processes  auto; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/conf.d/*.conf; }" > /etc/nginx/nginx.conf
+RUN mkdir /var/cache/nginx ; chown www-data:www-data /etc/nginx/conf.d /var/cache/nginx
 RUN echo 'server {' >> ${NGINX_CONF}
-RUN echo 'client_max_body_size ${MAX_UPLOAD};' >> ${NGINX_CONF}
-RUN echo 'server_name  ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_CONF}
+RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_CONF}
+RUN echo 'server_name ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_CONF}
 RUN echo 'index index.php index.html index.htm;' >> ${NGINX_CONF}
 RUN echo "root ${PROJECTS_DIR}/\$subdomain/public;" >> ${NGINX_CONF}
 RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_CONF}
@@ -113,7 +114,17 @@ RUN echo '}}' >> ${NGINX_CONF}
 RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf
 RUN sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
 
-RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service mysql restart \n service php5-fpm restart \n service redis-server restart \n service gearman-job-server \n service sphinxsearch restart \n tail -f logs/* & /bin/bash' > ${HOME_DIR}/run.sh
+# sshd
+RUN echo root:root | chpasswd
+RUN sed -i.bak 's/PermitRootLogin \(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
+
+# cleanups
+RUN apt-get clean; updatedb
+
+RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service mysql restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
+RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
+RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart; fi \n' >> ${HOME_DIR}/run.sh
+RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
 
 ENTRYPOINT ${HOME_DIR}/run.sh

@@ -12,6 +12,10 @@ RUN echo 'apc.enabled=0' >> /etc/php5/mods-available/apcu.ini
 RUN echo 'opcache.enable=0' >> /etc/php5/mods-available/opcache.ini
 RUN echo 'xdebug.max_nesting_level=600' >> /etc/php5/mods-available/xdebug.ini
 
+# nginx setup
+RUN sed -i.bak 's/server_name \~\(.*\)/server_name \~\^\(\?\<domain\>\.\+\)\$;/g' ${NGINX_CONF}
+RUN echo "root ${PROJECTS_DIR}/\$subdomain/public;" >> ${NGINX_CONF}
+
 # build
 # docker build -t perfectweb/development .
 
