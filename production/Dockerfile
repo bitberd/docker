@@ -94,7 +94,7 @@ RUN cd ngx_openresty-1.7.10.1; make; make install
 RUN rm -fr ngx_openresty-1.7.10.1.tar.gz master.zip replace.zip ngx_openresty-1.7.10.1 sregex-master replace-filter-nginx-module-master
 
 RUN echo 'user www-data; worker_processes  auto; error_log  ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log main; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/conf.d/*.conf; }' > /etc/nginx/nginx.conf
-RUN mkdir /etc/nginx/conf.d; chown nginx:nginx /etc/nginx/conf.d
+RUN mkdir /etc/nginx/conf.d; chown www-data:www-data /etc/nginx/conf.d
 RUN echo 'server {' >> ${NGINX_CONF}
 RUN echo 'client_max_body_size ${MAX_UPLOAD};' >> ${NGINX_CONF}
 RUN echo 'server_name  ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_CONF}
