@@ -58,7 +58,6 @@ EXPOSE 80 443 3306 6379 4730
 RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html
 RUN mkdir ${LOGS_DIR}
 RUN > ${HOME_DIR}/logs/php.log
-RUN chown www-data:www-data ${LOGS_DIR}/php.log
 
 # php setup
 RUN rm /etc/php5/fpm/php.ini
@@ -90,12 +89,12 @@ RUN sed -i.bak "s|\;access\.log = log|access\.log = ${LOGS_DIR}|g" ${FPM_POOL_CO
 RUN wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
 RUN tar xvf ngx_openresty-1.7.10.1.tar.gz; unzip master.zip; unzip replace.zip
 RUN cd sregex-master; make; make install
-RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=www-data --group=www-data --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
+RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
 RUN cd ngx_openresty-1.7.10.1; make; make install
 RUN rm -fr ngx_openresty-1.7.10.1.tar.gz master.zip replace.zip ngx_openresty-1.7.10.1 sregex-master replace-filter-nginx-module-master
 
-RUN echo "user www-data; worker_processes  auto; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/conf.d/*.conf; }" > /etc/nginx/nginx.conf
-RUN mkdir /var/cache/nginx ; rm -f /etc/nginx/sites-enabled/default ; chown www-data:www-data /etc/nginx/conf.d /var/cache/nginx
+RUN echo "user root; worker_processes  auto; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/conf.d/*.conf; }" > /etc/nginx/nginx.conf
+RUN mkdir /var/cache/nginx ; rm -f /etc/nginx/sites-enabled/default
 RUN echo 'server {' >> ${NGINX_CONF}
 RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_CONF}
 RUN echo 'server_name ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_CONF}
