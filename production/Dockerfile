@@ -84,6 +84,7 @@ RUN sed -i.bak 's/\;request_slowlog_timeout =\(.*\)/request_slowlog_timeout = 10
 RUN sed -i.bak 's/\;catch_workers_output/catch_workers_output/g' ${FPM_POOL_CONF}
 RUN sed -i.bak "s|\;slowlog = log|slowlog = ${LOGS_DIR}|g" ${FPM_POOL_CONF}
 RUN sed -i.bak "s|\;access\.log = log|access\.log = ${LOGS_DIR}|g" ${FPM_POOL_CONF}
+RUN sed -i.bak 's/www-data/root/g' ${FPM_POOL_CONF}
 
 # nginx setup
 RUN wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
