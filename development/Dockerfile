@@ -5,12 +5,14 @@ ENV APPLICATION_ENV development
 ENV PHP_INI /etc/php5/cli/php.ini
 
 # php setup
-RUN sed -i.bak 's/display_errors = On/display_errors = Off/g' ${PHP_INI}
+RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = On/g' ${PHP_INI}
 
 # some php extension changes
 RUN echo 'apc.enabled=0' >> /etc/php5/mods-available/apcu.ini
 RUN echo 'opcache.enable=0' >> /etc/php5/mods-available/opcache.ini
 RUN echo 'xdebug.max_nesting_level=600' >> /etc/php5/mods-available/xdebug.ini
+RUN echo 'xdebug.remote_enable=true' >> /etc/php5/mods-available/xdebug.ini
+RUN echo 'xdebug.profiler_enable_trigger=true' >> /etc/php5/mods-available/xdebug.ini
 
 # nginx setup
 RUN sed -i.bak 's/server_name \~\(.*\)/server_name \~\^\(\?\<domain\>\.\+\)\$;/g' ${NGINX_CONF}

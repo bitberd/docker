@@ -7,7 +7,10 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV APPLICATION_ENV production
 ENV PHP_INI /etc/php5/cli/php.ini
-ENV NGINX_CONF /etc/nginx/conf.d/vhost.conf
+ENV NGINX_VHOST_DIR /etc/nginx/sites-enabled
+ENV NGINX_VHOST ${NGINX_VHOST_DIR}/vhost.conf
+
+ENV NGINX_CONF /etc/nginx/nginx.conf
 ENV FPM_POOL_CONF /etc/php5/fpm/pool.d/www.conf
 ENV HOME_DIR /root
 ENV PROJECTS_DIR /var/www/html
@@ -57,7 +60,7 @@ EXPOSE 80 443 3306 6379 4730
 # setup logs and folders
 RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html
 RUN mkdir ${LOGS_DIR}
-RUN > ${HOME_DIR}/logs/php.log
+RUN > ${LOGS_DIR}/php.log
 
 # php setup
 RUN rm /etc/php5/fpm/php.ini
@@ -67,7 +70,7 @@ RUN sed -i.bak 's/short_open_tag = \(.*\)/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/London\"/g' ${PHP_INI}
 RUN sed -i.bak 's/upload_max_filesize = \(.*\)/upload_max_filesize = ${MAX_UPLOAD}/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
-RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = On/g' ${PHP_INI}
+RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = Off/g' ${PHP_INI}
 RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = On/g' ${PHP_INI}
 RUN sed -i.bak 's/error_reporting =\(.*\)/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT \& ~E_NOTICE/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_prepend_string =\(.*\)/error_prepend_string = \"<pre>\"/g' ${PHP_INI}
@@ -90,25 +93,25 @@ RUN sed -i.bak 's/www-data/root/g' ${FPM_POOL_CONF}
 RUN wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
 RUN tar xvf ngx_openresty-1.7.10.1.tar.gz; unzip master.zip; unzip replace.zip
 RUN cd sregex-master; make; make install
-RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=root --group=root --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
+RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=${NGINX_CONF} --error-log-path=${LOGS_DIR}/nginx.error.log --http-log-path=${LOGS_DIR}/nginx.access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=root --group=root --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
 RUN cd ngx_openresty-1.7.10.1; make; make install
 RUN rm -fr ngx_openresty-1.7.10.1.tar.gz master.zip replace.zip ngx_openresty-1.7.10.1 sregex-master replace-filter-nginx-module-master
 
-RUN echo "user root; worker_processes  auto; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include /etc/nginx/sites-enabled/*.conf; }" > /etc/nginx/nginx.conf
-RUN mkdir /var/cache/nginx ; rm -f /etc/nginx/sites-enabled/default
-RUN echo 'server {' >> ${NGINX_CONF}
-RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_CONF}
-RUN echo 'server_name ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_CONF}
-RUN echo 'index index.php index.html index.htm;' >> ${NGINX_CONF}
-RUN echo "root ${PROJECTS_DIR}/\$subdomain/public;" >> ${NGINX_CONF}
-RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_CONF}
-RUN echo 'location ~ \.php {' >> ${NGINX_CONF}
-RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock;' >> ${NGINX_CONF}
-RUN echo 'fastcgi_intercept_errors on;' >> ${NGINX_CONF}
-RUN echo 'fastcgi_index index.php;' >> ${NGINX_CONF}
-RUN echo "fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;" >> ${NGINX_CONF}
-RUN echo 'include        fastcgi_params;' >> ${NGINX_CONF}
-RUN echo '}}' >> ${NGINX_CONF}
+RUN echo "user root; worker_processes  auto; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections  1024; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include ${NGINX_VHOST_DIR}/*.conf; }" > ${NGINX_CONF}
+RUN mkdir /var/cache/nginx ; rm -f ${NGINX_VHOST_DIR}/default
+RUN echo 'server {' >> ${NGINX_VHOST}
+RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_VHOST}
+RUN echo 'server_name ~^local\.(?<subdomain>.+)\.(.*)$;' >> ${NGINX_VHOST}
+RUN echo 'index index.php index.html index.htm;' >> ${NGINX_VHOST}
+RUN echo "root ${PROJECTS_DIR}/\$subdomain/public;" >> ${NGINX_VHOST}
+RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_VHOST}
+RUN echo 'location ~ \.php {' >> ${NGINX_VHOST}
+RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock;' >> ${NGINX_VHOST}
+RUN echo 'fastcgi_intercept_errors on;' >> ${NGINX_VHOST}
+RUN echo 'fastcgi_index index.php;' >> ${NGINX_VHOST}
+RUN echo "fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;" >> ${NGINX_VHOST}
+RUN echo 'include        fastcgi_params;' >> ${NGINX_VHOST}
+RUN echo '}}' >> ${NGINX_VHOST}
 
 # sphinxsearch
 RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf
