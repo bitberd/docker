@@ -9,7 +9,7 @@ ENV APPLICATION_ENV production
 ENV PHP_INI /etc/php5/cli/php.ini
 ENV NGINX_VHOST_DIR /etc/nginx/sites-enabled
 ENV NGINX_VHOST ${NGINX_VHOST_DIR}/vhost.conf
-
+ENV START_MYSQL true
 ENV NGINX_CONF /etc/nginx/nginx.conf
 ENV FPM_POOL_CONF /etc/php5/fpm/pool.d/www.conf
 ENV HOME_DIR /root
@@ -125,9 +125,10 @@ RUN sed -i.bak 's/PermitRootLogin \(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_co
 # cleanups
 RUN apt-get clean; updatedb
 
-RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service mysql restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
+RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart; fi \n' >> ${HOME_DIR}/run.sh
+RUN echo ' if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
 RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
 
