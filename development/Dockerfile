@@ -30,3 +30,7 @@ RUN echo "root ${PROJECTS_DIR}/\$subdomain/public;" >> ${NGINX_CONF}
 
 # tips
 ## if you want to use your local mysql server or anything else that runs on socket you can add `-v /var/lib/mysql/mysql.sock:/var/run/mysqld/mysqld.sock` to your run command (replace the path with the sock path you wanna mount)
+
+# paths
+# sphinx: /etc/sphinxsearch/sphinx.conf
+# mysql: /var/run/mysqld/mysqld.sock

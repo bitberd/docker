@@ -123,7 +123,7 @@ RUN apt-get clean; updatedb
 
 RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
-RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart; fi \n' >> ${HOME_DIR}/run.sh
+RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab - \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
 RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 /root/run.sh
