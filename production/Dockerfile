@@ -26,10 +26,11 @@ RUN apt-get -y install software-properties-common
 RUN add-apt-repository -y ppa:nginx/stable
 RUN add-apt-repository -y ppa:mc3man/trusty-media
 RUN add-apt-repository -y ppa:ondrej/php5-5.6
+RUN add-apt-repository -y ppa:builds/sphinxsearch-stable
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
+RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN rm /etc/localtime ; ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
@@ -116,7 +117,7 @@ RUN sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
 
 # sshd
 RUN echo root:root | chpasswd
-RUN sed -i.bak 's/PermitRootLogin \(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/PermitRootLogin\(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
 # cleanups
 RUN apt-get clean; updatedb
