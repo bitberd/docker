@@ -2,10 +2,11 @@ FROM ubuntu:latest
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
+WORKDIR /root
 
 # variables setup
-ENV DEBIAN_FRONTEND noninteractive
 ENV APPLICATION_ENV production
+ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_INI /etc/php5/cli/php.ini
 ENV NGINX_VHOST_DIR /etc/nginx/sites-enabled
 ENV NGINX_VHOST ${NGINX_VHOST_DIR}/vhost.conf
@@ -17,6 +18,9 @@ ENV PROJECTS_DIR /var/www/html
 ENV LOGS_DIR ${HOME_DIR}/logs
 ENV MAX_UPLOAD 4000M
 
+# ports
+EXPOSE 80 443 3306 6379 4730
+
 # add repositories
 RUN apt-get -y install software-properties-common
 RUN add-apt-repository -y ppa:nginx/stable
@@ -26,7 +30,9 @@ RUN add-apt-repository -y ppa:ondrej/php5-5.6
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
 RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
+
 RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN rm /etc/localtime ; ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN npm install -g bower forever
 
 RUN wget -O /usr/bin/composer https://getcomposer.org/composer.phar
@@ -50,28 +56,18 @@ RUN chmod +x /usr/bin/phpmd
 RUN wget -O /usr/bin/phing http://www.phing.info/get/phing-latest.phar
 RUN chmod +x /usr/bin/phing
 
-WORKDIR /root
-RUN rm /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
-
-# ports
-EXPOSE 80 443 3306 6379 4730
-
 # setup logs and folders
-RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html
-RUN mkdir ${LOGS_DIR}
-RUN > ${LOGS_DIR}/php.log
+RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html ; mkdir ${LOGS_DIR} ; echo '' > ${LOGS_DIR}/php.log
 
 # php setup
-RUN rm /etc/php5/fpm/php.ini
-RUN ln -s ${PHP_INI} /etc/php5/fpm/php.ini
+RUN rm /etc/php5/fpm/php.ini ; ln -s ${PHP_INI} /etc/php5/fpm/php.ini
 RUN sed -i.bak "s|error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i.bak 's/short_open_tag = \(.*\)/short_open_tag = On/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/London\"/g' ${PHP_INI}
 RUN sed -i.bak 's/upload_max_filesize = \(.*\)/upload_max_filesize = ${MAX_UPLOAD}/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
 RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = Off/g' ${PHP_INI}
-RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = On/g' ${PHP_INI}
+RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = Off/g' ${PHP_INI}
 RUN sed -i.bak 's/error_reporting =\(.*\)/error_reporting = E_ALL \& ~E_DEPRECATED \& ~E_STRICT \& ~E_NOTICE/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_prepend_string =\(.*\)/error_prepend_string = \"<pre>\"/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_append_string =\(.*\)/error_append_string = \"<\/pre>\"/g' ${PHP_INI}
