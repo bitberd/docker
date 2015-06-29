@@ -26,7 +26,6 @@ RUN apt-get -y install software-properties-common
 RUN add-apt-repository -y ppa:nginx/stable
 RUN add-apt-repository -y ppa:mc3man/trusty-media
 RUN add-apt-repository -y ppa:ondrej/php5-5.6
-RUN add-apt-repository -y ppa:builds/sphinxsearch-stable
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
