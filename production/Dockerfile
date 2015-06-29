@@ -30,7 +30,8 @@ RUN add-apt-repository -y ppa:builds/sphinxsearch-stable
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server phpunit*
+RUN apt-get -y --force-yes install gcc nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient-dev php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server geoip-bin geoip-database geoip-dbg libgeoip-dev phpunit*
+RUN yes '' | pecl install -f sphinx
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN rm /etc/localtime ; ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
@@ -73,6 +74,7 @@ RUN sed -i.bak 's/error_reporting =\(.*\)/error_reporting = E_ALL \& ~E_DEPRECAT
 RUN sed -i.bak 's/\;error_prepend_string =\(.*\)/error_prepend_string = \"<pre>\"/g' ${PHP_INI}
 RUN sed -i.bak 's/\;error_append_string =\(.*\)/error_append_string = \"<\/pre>\"/g' ${PHP_INI}
 RUN sed -i.bak 's/post_max_size =\(.*\)/post_max_size = ${MAX_UPLOAD}/g' ${PHP_INI}
+RUN echo 'extension=sphinx.so' >> ${PHP_INI}
 
 # some php extension changes
 RUN echo 'apc.enabled=1' >> /etc/php5/mods-available/apcu.ini
