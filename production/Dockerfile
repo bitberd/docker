@@ -128,6 +128,6 @@ RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; 
 RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab - \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
 RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
-RUN chmod 0755 /root/run.sh
+RUN chmod 0755 ${HOME_DIR}/run.sh
 
 ENTRYPOINT ${HOME_DIR}/run.sh
