@@ -105,7 +105,7 @@ RUN echo 'index index.php index.html index.htm;' >> ${NGINX_VHOST}
 RUN echo "root ${PROJECTS_DIR}/\$project/public;" >> ${NGINX_VHOST}
 RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_VHOST}
 RUN echo "location ~ \.php { include ${NGINX_VHOST_DIR}/../fastcgi.conf; }}" >> ${NGINX_VHOST}
-RUN echo "include ${NGINX_VHOST_DIR}*.conf; }" >> ${NGINX_VHOST}
+RUN echo "include ${NGINX_VHOST_DIR/*.conf; }" >> ${NGINX_VHOST}
 
 RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
 RUN echo 'fastcgi_intercept_errors on;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
