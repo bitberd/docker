@@ -3,17 +3,31 @@ FROM perfectweb/development:latest
 # variables setup
 ENV APPLICATION_ENV development
 ENV PHP_INI /etc/php5/cli/php.ini
+ENV XDEBUG_INI /etc/php5/mods-available/xdebug.ini
+ENV HOME_DIR /root
+ENV DBGP_PATH http://downloads.activestate.com/Komodo/releases/9.1.0/remotedebugging/
+ENV DBGP_VERSION Komodo-PythonRemoteDebugging-9.1.0-87337-linux-x86_64
 
 # php setup
 RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = On/g' ${PHP_INI}
 RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = On/g' ${PHP_INI}
 
 # some php extension changes
-RUN echo 'apc.enabled=0' >> /etc/php5/mods-available/apcu.ini
-RUN echo 'opcache.enable=0' >> /etc/php5/mods-available/opcache.ini
-RUN echo 'xdebug.max_nesting_level=600' >> /etc/php5/mods-available/xdebug.ini
-RUN echo 'xdebug.remote_enable=true' >> /etc/php5/mods-available/xdebug.ini
-RUN echo 'xdebug.profiler_enable_trigger=true' >> /etc/php5/mods-available/xdebug.ini
+RUN echo 'apc.enabled=0' >> ${XDEBUG_INI}
+RUN echo 'opcache.enable=0' >> ${XDEBUG_INI}
+RUN echo 'xdebug.max_nesting_level=600' >> ${XDEBUG_INI}
+RUN echo 'xdebug.remote_enable=true' >> ${XDEBUG_INI}
+RUN echo 'xdebug.profiler_enable_trigger=true' >> ${XDEBUG_INI}
+RUN echo 'xdebug.remote_host=localhost' >> ${XDEBUG_INI}
+RUN echo 'xdebug.remote_port=9000' >> ${XDEBUG_INI}
+
+# setup dbgproxy
+RUN echo 'pydbgpproxy -d 0.0.0.0:9000 -i 0.0.0.0:9001' >> ${HOME_DIR}/run.sh
+RUN wget -O /usr/local/pydbgp.tar.gz ${DBGP_PATH}${DBGP_VERSION}.tar.gz
+RUN tar xvf /usr/local/pydbgp.tar.gz -C /usr/local/
+RUN rm -rf /usr/local/pydbgp.tar.gz
+RUN ln -s /usr/local/${DBGP_VERSION}/pydbgpproxy /usr/bin/pydbgpproxy
+
 
 # build
 # docker build -t perfectweb/development .
