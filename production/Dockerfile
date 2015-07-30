@@ -117,11 +117,11 @@ RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf
 RUN sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
 
 # sshd
-RUN echo root:root | chpasswd
-RUN sed -i.bak 's/PermitRootLogin\(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
-
-# cleanups
-RUN apt-get clean; updatedb
+RUN passwd -d root
+RUN sed -i.bak 's/(#*)PermitRootLogin\(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/(#*)UsePAM\(.*\)/UsePAM no/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/(#*)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/(#*)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
 
 RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
@@ -129,5 +129,8 @@ RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexe
 RUN echo ' if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
 RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 ${HOME_DIR}/run.sh
+
+# clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && updatedb
 
 ENTRYPOINT ${HOME_DIR}/run.sh
