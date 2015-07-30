@@ -17,19 +17,19 @@ ENV HOME_DIR /root
 ENV PROJECTS_DIR /var/www/html
 ENV LOGS_DIR ${HOME_DIR}/logs
 ENV MAX_UPLOAD 4000M
+ENV OPENRESTY_VERSION ngx_openresty-1.7.10.2;
 
 # ports
 EXPOSE 80 443 3306 6379 4730
 
 # add repositories
 RUN apt-get -y install software-properties-common
-RUN add-apt-repository -y ppa:nginx/stable
 RUN add-apt-repository -y ppa:mc3man/trusty-media
 RUN add-apt-repository -y ppa:ondrej/php5-5.6
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install gcc gpac nginx unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient-dev php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server geoip-bin geoip-database geoip-dbg libgeoip-dev phpunit*
+RUN apt-get -y --force-yes install gcc gpac unzip mysql-server wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient-dev php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server geoip-bin geoip-database geoip-dbg libgeoip-dev phpunit*
 RUN yes '' | pecl install -f sphinx
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
@@ -89,12 +89,12 @@ RUN sed -i.bak 's/www-data/root/g' ${FPM_POOL_CONF}
 RUN sed -i.bak 's/--daemonize/--daemonize --allow-to-run-as-root /g' /etc/init.d/php5-fpm
 
 # nginx setup
-RUN wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
-RUN tar xvf ngx_openresty-1.7.10.1.tar.gz; unzip master.zip; unzip replace.zip
+RUN wget http://openresty.org/download/${OPENRESTY_VERSION}.tar.gz; wget https://github.com/openresty/sregex/archive/master.zip; wget -O replace.zip https://github.com/openresty/replace-filter-nginx-module/archive/master.zip
+RUN tar xvf ${OPENRESTY_VERSION}.tar.gz; unzip master.zip; unzip replace.zip
 RUN cd sregex-master; make; make install
-RUN cd ngx_openresty-1.7.10.1; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=${NGINX_CONF} --error-log-path=${LOGS_DIR}/nginx.error.log --http-log-path=${LOGS_DIR}/nginx.access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=root --group=root --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
-RUN cd ngx_openresty-1.7.10.1; make; make install
-RUN rm -fr ngx_openresty-1.7.10.1.tar.gz master.zip replace.zip ngx_openresty-1.7.10.1 sregex-master replace-filter-nginx-module-master
+RUN cd ${OPENRESTY_VERSION}; ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=${NGINX_CONF} --error-log-path=${LOGS_DIR}/nginx.error.log --http-log-path=${LOGS_DIR}/nginx.access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=root --group=root --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_spdy_module --add-module=../replace-filter-nginx-module-master --with-ld-opt="-Wl,-rpath,/usr/local/lib"
+RUN cd ${OPENRESTY_VERSION}; make; make install
+RUN rm -fr ${OPENRESTY_VERSION}.tar.gz master.zip replace.zip ${OPENRESTY_VERSION} sregex-master replace-filter-nginx-module-master
 
 RUN echo "user root; worker_processes auto; worker_rlimit_nofile 65535; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections 10240; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include ${NGINX_VHOST_DIR}/*.conf; }" > ${NGINX_CONF}
 RUN mkdir /var/cache/nginx ; rm -f ${NGINX_VHOST_DIR}/default
