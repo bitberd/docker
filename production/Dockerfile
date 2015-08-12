@@ -8,7 +8,7 @@ WORKDIR /root
 ENV APPLICATION_ENV production
 ENV DEBIAN_FRONTEND noninteractive
 ENV PHP_INI /etc/php5/cli/php.ini
-ENV NGINX_VHOST_DIR /etc/nginx/sites-enabled
+ENV NGINX_VHOST_DIR /etc/nginx/vhosts
 ENV NGINX_VHOST ${NGINX_VHOST_DIR}/vhost.conf
 ENV START_MYSQL true
 ENV NGINX_CONF /etc/nginx/nginx.conf
@@ -97,7 +97,7 @@ RUN cd ${OPENRESTY_VERSION}; make; make install
 RUN rm -fr ${OPENRESTY_VERSION}.tar.gz master.zip replace.zip ${OPENRESTY_VERSION} sregex-master replace-filter-nginx-module-master
 
 RUN echo "user root; worker_processes auto; worker_rlimit_nofile 65535; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections 10240; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include ${NGINX_VHOST_DIR}/*.conf; }" > ${NGINX_CONF}
-RUN mkdir /var/cache/nginx ; rm -f ${NGINX_VHOST_DIR}/default
+RUN mkdir /var/cache/nginx ; mkdir ${NGINX_VHOST_DIR}
 RUN echo 'server {' >> ${NGINX_VHOST}
 RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_VHOST}
 RUN echo 'server_name "~^(?<project>.*?[a-z0-9]+)\.?(?<tld>[a-z0-9\.]{2,5})?(\.)local$";' >> ${NGINX_VHOST}
