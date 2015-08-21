@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
