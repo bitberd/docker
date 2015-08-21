@@ -1,4 +1,4 @@
-FROM perfectweb/development:latest
+FROM perfectweb/development
 
 # variables setup
 ENV APPLICATION_ENV development
