@@ -25,11 +25,12 @@ EXPOSE 80 443 3306 6379 4730
 # add repositories
 RUN apt-get -y install software-properties-common
 RUN add-apt-repository -y ppa:mc3man/trusty-media
+RUN add-apt-repository -y ppa:nginx/stable
 RUN add-apt-repository -y ppa:ondrej/php5-5.6
 
 RUN apt-get -y update
 RUN apt-get -y --force-yes dist-upgrade
-RUN apt-get -y --force-yes install gcc gpac mysql-server unzip wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient-dev php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server geoip-bin geoip-database geoip-dbg libgeoip-dev phpunit*
+RUN apt-get -y --force-yes install gcc gpac mysql-server nginx unzip wget ffmpeg gstreamer0.10-ffmpeg git locate nodejs npm telnet mysql-client redis-server libsphinxclient-dev php5 php5-redis php5-memcache php5-memcached php5-dev php5-imagick php5-mcrypt php5-geoip php5-json php5-intl php5-curl php5-xsl php5-xmlrpc php5-gd php5-cli php5-mysqlnd php5-xdebug php5-fpm php5-gearman php-codesniffer php5-oauth php5-apcu htop nano postfix sphinxsearch gearman-job-server openssh-server geoip-bin geoip-database geoip-dbg libgeoip-dev phpunit*
 RUN yes '' | pecl install -f sphinx
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
