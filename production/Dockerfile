@@ -35,7 +35,7 @@ RUN yes '' | pecl install -f sphinx
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN rm /etc/localtime ; ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
-RUN npm install -g bower forever
+RUN npm install -g bower forever grunt-cli
 
 RUN wget -O /usr/bin/composer https://getcomposer.org/composer.phar
 RUN chmod +x /usr/bin/composer
