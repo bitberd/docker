@@ -2,9 +2,7 @@ FROM perfectweb/production
 
 # variables setup
 ENV APPLICATION_ENV development
-ENV PHP_INI /etc/php5/cli/php.ini
 ENV XDEBUG_INI /etc/php5/mods-available/xdebug.ini
-ENV HOME_DIR /root
 ENV DBGP_PATH http://downloads.activestate.com/Komodo/releases/9.1.0/remotedebugging/
 ENV DBGP_VERSION Komodo-PythonRemoteDebugging-9.1.0-87337-linux-x86_64
 
@@ -22,11 +20,10 @@ RUN echo 'xdebug.remote_host=localhost' >> ${XDEBUG_INI}
 RUN echo 'xdebug.remote_port=9000' >> ${XDEBUG_INI}
 
 # setup dbgproxy
-RUN echo 'pydbgpproxy -d 0.0.0.0:9000 -i 0.0.0.0:9001' >> ${HOME_DIR}/run.sh
-RUN wget -O /usr/local/pydbgp.tar.gz ${DBGP_PATH}${DBGP_VERSION}.tar.gz
-RUN tar xvf /usr/local/pydbgp.tar.gz -C /usr/local/
-RUN rm -rf /usr/local/pydbgp.tar.gz
+RUN sed -i.bak "1inohup pydbgpproxy -d 0.0.0.0:9000 -i 0.0.0.0:9001 >> ${LOGS_DIR}/php.log&" ${HOME_DIR}/run.sh
+RUN wget -O /usr/local/pydbgp.tar.gz ${DBGP_PATH}${DBGP_VERSION}.tar.gz; tar xvf /usr/local/pydbgp.tar.gz -C /usr/local/; rm -rf /usr/local/pydbgp.tar.gz
 RUN ln -s /usr/local/${DBGP_VERSION}/pydbgpproxy /usr/bin/pydbgpproxy
+RUN wget https://bootstrap.pypa.io/get-pip.py; python get-pip.py; pip install dbgp; rm -f get-pip.py
 
 
 # build

@@ -119,10 +119,10 @@ RUN sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
 
 # sshd
 RUN passwd -d root
-RUN sed -i.bak 's/(#*)PermitRootLogin\(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
-RUN sed -i.bak 's/(#*)UsePAM\(.*\)/UsePAM no/g' /etc/ssh/sshd_config
-RUN sed -i.bak 's/(#*)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
-RUN sed -i.bak 's/(#*)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/\(.*\)PermitRootLogin\(.*\)/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/\(.*\)UsePAM\(.*\)/UsePAM no/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/\(.*\)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
+RUN sed -i.bak 's/\(.*\)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
 
 RUN echo ' service ssh restart \n service postfix restart \n service nginx restart \n service php5-fpm restart \n service redis-server restart \n ' > ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
