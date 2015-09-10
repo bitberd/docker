@@ -86,6 +86,10 @@ RUN sed -i.bak 's/\;request_slowlog_timeout =\(.*\)/request_slowlog_timeout = 10
 RUN sed -i.bak 's/\;catch_workers_output/catch_workers_output/g' ${FPM_POOL_CONF}
 RUN sed -i.bak "s|\;slowlog = log|slowlog = ${LOGS_DIR}|g" ${FPM_POOL_CONF}
 RUN sed -i.bak "s|\;access\.log = log|access\.log = ${LOGS_DIR}|g" ${FPM_POOL_CONF}
+RUN sed -i.bak "s/pm.max_children =\(.*\)/pm.max_children = 50/g" ${FPM_POOL_CONF}
+RUN sed -i.bak "s/pm.start_servers =\(.*\)/pm.start_servers = 10/g" ${FPM_POOL_CONF}
+RUN sed -i.bak "s/pm.min_spare_servers =\(.*\)/pm.min_spare_servers = 10/g" ${FPM_POOL_CONF}
+RUN sed -i.bak "s/pm.max_spare_servers =\(.*\)/pm.max_spare_servers = 10/g" ${FPM_POOL_CONF}
 RUN sed -i.bak 's/www-data/root/g' ${FPM_POOL_CONF}
 RUN sed -i.bak 's/--daemonize/--daemonize --allow-to-run-as-root /g' /etc/init.d/php5-fpm
 
