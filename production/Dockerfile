@@ -140,7 +140,7 @@ RUN chmod 0755 ${HOME_DIR}/run.sh
 # imagemagick
 RUN wget http://www.imagemagick.org/download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
 RUN tar xzvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; cd ImageMagick-${IMAGEMAGICK_VERSION}/ ; ./configure --prefix=/opt/imagemagick-${IMAGEMAGICK_VERSION} && make && make install
-RUN rm -rm ImageMagick*
+RUN rm -rf ImageMagick*
 
 # lua
 RUN luarocks install --server=http://rocks.moonscript.org magick
