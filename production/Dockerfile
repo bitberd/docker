@@ -67,6 +67,7 @@ RUN ln -s ${PROJECTS_DIR} ${HOME_DIR}/html ; mkdir ${LOGS_DIR} ; echo '' > ${LOG
 RUN rm /etc/php5/fpm/php.ini ; ln -s ${PHP_INI} /etc/php5/fpm/php.ini
 RUN sed -i.bak "s|error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i.bak 's/short_open_tag = \(.*\)/short_open_tag = On/g' ${PHP_INI}
+RUN sed -i.bak 's/allow_url_fopen = \(.*\)/allow_url_fopen = Off/g' ${PHP_INI}
 RUN sed -i.bak 's/\;date\.timezone =/date\.timezone = \"Europe\/London\"/g' ${PHP_INI}
 RUN sed -i.bak 's/upload_max_filesize = \(.*\)/upload_max_filesize = ${MAX_UPLOAD}/g' ${PHP_INI}
 RUN sed -i.bak "s|\;error_log = \(.*\)|error_log = ${LOGS_DIR}/php\.log|g" ${PHP_INI}
