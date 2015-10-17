@@ -9,6 +9,7 @@ ENV DBGP_VERSION Komodo-PythonRemoteDebugging-9.1.0-87337-linux-x86_64
 # php setup
 RUN sed -i.bak 's/display_errors = \(.*\)/display_errors = On/g' ${PHP_INI}
 RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = On/g' ${PHP_INI}
+RUN sed -i.bak 's/allow_url_fopen = \(.*\)/allow_url_fopen = On/g' ${PHP_INI}
 
 # some php extension changes
 RUN echo 'apc.enabled=0' >> ${XDEBUG_INI}
