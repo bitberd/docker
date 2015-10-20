@@ -12,13 +12,7 @@ RUN sed -i.bak 's/display_startup_errors = \(.*\)/display_startup_errors = On/g'
 RUN sed -i.bak 's/allow_url_fopen = \(.*\)/allow_url_fopen = On/g' ${PHP_INI}
 
 # some php extension changes
-RUN echo 'apc.enabled=0' >> ${XDEBUG_INI}
-RUN echo 'opcache.enable=0' >> ${XDEBUG_INI}
-RUN echo 'xdebug.max_nesting_level=600' >> ${XDEBUG_INI}
-RUN echo 'xdebug.remote_enable=true' >> ${XDEBUG_INI}
-RUN echo 'xdebug.profiler_enable_trigger=true' >> ${XDEBUG_INI}
-RUN echo 'xdebug.remote_host=localhost' >> ${XDEBUG_INI}
-RUN echo 'xdebug.remote_port=9000' >> ${XDEBUG_INI}
+RUN echo -e 'apc.enabled=0\nopcache.enable=0\nxdebug.max_nesting_level=600\nxdebug.remote_enable=true\nxdebug.profiler_enable_trigger=true\nxdebug.remote_host=localhost\nxdebug.remote_port=9000' >> ${XDEBUG_INI}
 
 # setup dbgproxy
 RUN sed -i.bak "1inohup pydbgpproxy -d 0.0.0.0:9000 -i 0.0.0.0:9001 >> ${LOGS_DIR}/php.log&" ${HOME_DIR}/run.sh
