@@ -1,4 +1,4 @@
-FROM perfectweb/production
+FROM perfectweb/production:master
 
 # variables setup
 ENV APPLICATION_ENV development
