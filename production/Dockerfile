@@ -19,6 +19,7 @@ ENV LOGS_DIR ${HOME_DIR}/logs
 ENV MAX_UPLOAD 4000M
 ENV OPENRESTY_VERSION ngx_openresty-1.9.3.1
 ENV IMAGEMAGICK_VERSION 6.9.2-4
+ENV INIT_SCRIPTS ;
 
 # ports
 EXPOSE 80 443 3306 6379 4730
@@ -134,6 +135,7 @@ RUN echo ' service ssh restart \n service postfix restart \n service nginx resta
 RUN echo ' if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab - \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
+RUN echo ' while INIT_SCRIPTS read -ra ADDR; do \n for i in "${ADDR[@]}"; do \n sh $i \n done \n done <<< "$IN" \n ' >> ${HOME_DIR}/run.sh
 RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 ${HOME_DIR}/run.sh
 
