@@ -121,8 +121,7 @@ RUN echo "fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;"
 RUN echo 'include fastcgi_params;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
 
 # sphinxsearch
-RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf
-RUN sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
+RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf ; sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
 
 # sshd
 RUN passwd -d root
@@ -139,14 +138,12 @@ RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 ${HOME_DIR}/run.sh
 
 # imagemagick
-RUN wget http://www.imagemagick.org/download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
-RUN tar xzvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; cd ImageMagick-${IMAGEMAGICK_VERSION}/ ; ./configure --prefix=/opt/imagemagick-${IMAGEMAGICK_VERSION} && make && make install
-RUN rm -rf ImageMagick*
+RUN wget http://www.imagemagick.org/download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; tar xzvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; cd ImageMagick-${IMAGEMAGICK_VERSION}/ ; ./configure --prefix=/opt/imagemagick-${IMAGEMAGICK_VERSION} && make && make install ; rm -rf ImageMagick*
 
 # lua
 RUN luarocks install --server=http://rocks.moonscript.org magick
 
 # clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && updatedb
+RUN apt-get clean ; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ; updatedb
 
 ENTRYPOINT ${HOME_DIR}/run.sh
