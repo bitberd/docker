@@ -131,12 +131,12 @@ RUN sed -i.bak 's/\(.*\)UsePAM\(.*\)/UsePAM no/g' /etc/ssh/sshd_config
 RUN sed -i.bak 's/\(.*\)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
 RUN sed -i.bak 's/\(.*\)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
 
-RUN echo -e 'service ssh restart\nservice postfix restart\nservice nginx restart\nservice php5-fpm restart\nservice redis-server restart\n' > ${HOME_DIR}/run.sh
-RUN echo -e 'if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi \n' >> ${HOME_DIR}/run.sh
-RUN echo -e 'if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab - \n ' >> ${HOME_DIR}/run.sh
-RUN echo -e 'if [ -n "$START_MYSQL" ]; then service mysql restart; fi \n' >> ${HOME_DIR}/run.sh
-RUN echo -e 'for i in $(echo $INIT_SCRIPTS | tr ";" "\\n")\ndo\n\tsh $i\ndone' >> ${HOME_DIR}/run.sh
-RUN echo ' tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
+RUN echo 'service ssh restart ; service postfix restart ; service nginx restart ; service php5-fpm restart ; service redis-server restart' > ${HOME_DIR}/run.sh
+RUN echo 'if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi' >> ${HOME_DIR}/run.sh
+RUN echo 'if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab -' >> ${HOME_DIR}/run.sh
+RUN echo 'if [ -n "$START_MYSQL" ]; then service mysql restart; fi' >> ${HOME_DIR}/run.sh
+RUN echo 'for i in $(echo $INIT_SCRIPTS | tr ";" "\\n")\ndo\n\tsh $i\ndone' >> ${HOME_DIR}/run.sh
+RUN echo 'tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 ${HOME_DIR}/run.sh
 
 # imagemagick
