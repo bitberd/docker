@@ -105,7 +105,7 @@ RUN cd ${OPENRESTY_VERSION}; ./configure --with-cc-opt='-g -O2 -fPIE -fstack-pro
 RUN cd ${OPENRESTY_VERSION}; make; make install
 RUN rm -fr ${OPENRESTY_VERSION}.tar.gz master.zip replace.zip ${OPENRESTY_VERSION} sregex-master replace-filter-nginx-module-master
 
-RUN echo "user root; worker_processes auto; worker_rlimit_nofile 65535; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections 10240; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80 default_server; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include ${NGINX_VHOST_DIR}/*.conf; }" > ${NGINX_CONF}
+RUN echo "env MYSQL_PORT_3306_TCP_ADDR; user root; worker_processes auto; worker_rlimit_nofile 65535; error_log ${LOGS_DIR}/nginx.error.log; events { worker_connections 10240; } http { include mime.types; default_type application/octet-stream; access_log  ${LOGS_DIR}/nginx.access.log; sendfile on; keepalive_timeout 65; gzip  on; server { listen 80 default_server; server_name  _; location / { root html; index  index.html index.htm; } error_page   500 502 503 504  /50x.html; location = /50x.html { root html; } } include ${NGINX_VHOST_DIR}/*.conf; }" > ${NGINX_CONF}
 RUN mkdir /var/cache/nginx ; mkdir ${NGINX_VHOST_DIR}
 RUN echo 'server {' >> ${NGINX_VHOST}
 RUN echo "client_max_body_size ${MAX_UPLOAD};" >> ${NGINX_VHOST}
