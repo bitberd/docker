@@ -132,9 +132,9 @@ RUN sed -i.bak 's/\(.*\)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /
 RUN sed -i.bak 's/\(.*\)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
 
 RUN echo 'service ssh restart ; service postfix restart ; service nginx restart ; service php5-fpm restart ; service redis-server restart' > ${HOME_DIR}/run.sh
-RUN echo 'if [ -n "$START_GEARMAN" ]; then service gearman-job-server restart; fi' >> ${HOME_DIR}/run.sh
-RUN echo 'if [ -n "$START_SPHINX" ]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab -' >> ${HOME_DIR}/run.sh
-RUN echo 'if [ -n "$START_MYSQL" ]; then service mysql restart; fi' >> ${HOME_DIR}/run.sh
+RUN echo 'if [[ $START_GEARMAN != "false" ]]; then service gearman-job-server restart; fi' >> ${HOME_DIR}/run.sh
+RUN echo 'if [[ $START_SPHINX != "false" ]]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab -' >> ${HOME_DIR}/run.sh
+RUN echo 'if [[ $START_MYSQL != "false" ]]; then service mysql restart; fi' >> ${HOME_DIR}/run.sh
 RUN echo 'for i in $(echo $INIT_SCRIPTS | tr ";" "\\n")\ndo\n\tsh $i\ndone' >> ${HOME_DIR}/run.sh
 RUN echo 'tail -f logs/* & /bin/bash' >> ${HOME_DIR}/run.sh
 RUN chmod 0755 ${HOME_DIR}/run.sh
