@@ -142,6 +142,9 @@ RUN chmod 0755 ${HOME_DIR}/run.sh
 # imagemagick
 RUN wget http://www.imagemagick.org/download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; tar xzvf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz ; cd ImageMagick-${IMAGEMAGICK_VERSION} ; ./configure --prefix=/opt/imagemagick-${IMAGEMAGICK_VERSION} && make && make install ; rm -rf /root/ImageMagick*
 
+# mysql
+RUN echo '[mysqld] \n max_allowed_packet=600M' >> /etc/mysql/conf.d/mysql.cnf
+
 # lua
 RUN luarocks install --server=http://rocks.moonscript.org magick
 
