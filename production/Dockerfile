@@ -115,11 +115,7 @@ RUN echo "root ${PROJECTS_DIR}/\$project/public;" >> ${NGINX_VHOST}
 RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_VHOST}
 RUN echo "location ~ \.php { include ${NGINX_VHOST_DIR}/../fastcgi.conf; }}" >> ${NGINX_VHOST}
 
-RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
-RUN echo 'fastcgi_intercept_errors on;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
-RUN echo 'fastcgi_index index.php;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
-RUN echo "fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;" >> ${NGINX_VHOST_DIR}/../fastcgi.conf
-RUN echo 'include fastcgi_params;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
+RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock; \ nfastcgi_intercept_errors on; \n fastcgi_index index.php; \n fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name; \n include fastcgi_params;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
 
 # sphinxsearch
 RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf ; sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
