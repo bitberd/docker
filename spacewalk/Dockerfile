@@ -23,6 +23,8 @@ RUN yum install -y spacewalk-postgresql
 # supervisor
 ADD conf/supervisord.conf /etc/supervisord.d/supervisord.conf
 
+RUN sudo -u postgres /usr/bin/pg_ctl initdb  -D /var/lib/pgsql/data/
+RUN sudo -u postgres /usr/bin/pg_ctl start -D /var/lib/pgsql/data/  -w -t 300
 RUN spacewalk-setup --disconnected --answer-file=/root/answers.txt --skip-db-diskspace-check --run-cobbler
 
 # clean
