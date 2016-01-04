@@ -115,7 +115,7 @@ RUN echo "root ${PROJECTS_DIR}/\$project/public;" >> ${NGINX_VHOST}
 RUN echo 'location / { try_files $uri $uri/ /index.php?$query_string; }' >> ${NGINX_VHOST}
 RUN echo "location ~ \.php { include ${NGINX_VHOST_DIR}/../fastcgi.conf; }}" >> ${NGINX_VHOST}
 
-RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock; \ nfastcgi_intercept_errors on; \n fastcgi_index index.php; \n fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name; \n include fastcgi_params;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
+RUN echo 'fastcgi_pass   unix:/var/run/php5-fpm.sock; \nfastcgi_intercept_errors on; \nfastcgi_index index.php; \ninclude fastcgi_params;' >> ${NGINX_VHOST_DIR}/../fastcgi.conf
 
 # sphinxsearch
 RUN cp /etc/sphinxsearch/sphinx.conf.sample /etc/sphinxsearch/sphinx.conf ; sed -i.bak 's/START=\(.*\)/START=yes/g' /etc/default/sphinxsearch
@@ -127,7 +127,7 @@ RUN sed -i.bak 's/\(.*\)UsePAM\(.*\)/UsePAM no/g' /etc/ssh/sshd_config
 RUN sed -i.bak 's/\(.*\)PermitEmptyPasswords\(.*\)/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config
 RUN sed -i.bak 's/\(.*\)IgnoreUserKnownHosts\(.*\)/IgnoreUserKnownHosts yes/g' /etc/ssh/sshd_config
 
-RUN echo 'service ssh restart ; service postfix restart ; service nginx restart ; service php5-fpm restart ; service redis-server restart' > ${HOME_DIR}/run.sh
+RUN echo '#!/bin/bash\nservice ssh restart ; service postfix restart ; service nginx restart ; service php5-fpm restart ; service redis-server restart' > ${HOME_DIR}/run.sh
 RUN echo 'if [[ $START_GEARMAN != "false" ]]; then service gearman-job-server restart; fi' >> ${HOME_DIR}/run.sh
 RUN echo 'if [[ $START_SPHINX != "false" ]]; then service sphinxsearch restart ; indexer --rotate --all; fi \n (crontab -l 2>/dev/null; echo "30 * * * * indexer --rotate --all")| crontab -' >> ${HOME_DIR}/run.sh
 RUN echo 'if [[ $START_MYSQL != "false" ]]; then service mysql restart; fi' >> ${HOME_DIR}/run.sh
