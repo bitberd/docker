@@ -21,7 +21,7 @@ RUN yum versionlock cglib-2.1.3-4.jpp5
 RUN yum update -y
 RUN yum install -y spacewalk-postgresql
 
-RUN spacewalk-setup --disconnected --answer-file=/root/answers.txt
+RUN spacewalk-setup --disconnected --answer-file=/root/answers.txt --skip-db-diskspace-check --run-cobbler --enable-tftp=yes
 
 
 # clean
