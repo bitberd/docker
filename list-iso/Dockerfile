@@ -14,4 +14,4 @@ RUN sed -i.bak "s/location \/ {/location \/ { autoindex on;/g" /etc/nginx/conf.d
 WORKDIR /root/
 ADD . run.sh
 
-CMD ["run.sh"]
+CMD ["/root/run.sh"]
