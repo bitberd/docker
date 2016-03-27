@@ -1,5 +1,3 @@
-# ex: docker run perfectweb/cpuminer --url stratum+tcp://ltc.pool.com:80 --user creack.worker1 --pass abcdef
-
 FROM ubuntu:latest
 MAINTAINER	Alin Jurj <office@perfectweb.ro>
 
@@ -11,6 +9,6 @@ RUN	apt-get install -qqy libcurl4-openssl-dev git make automake
 
 RUN	git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
-RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make
+RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make; make install
 
-ENTRYPOINT	["/cpuminer-multi/minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
+ENTRYPOINT	["minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
