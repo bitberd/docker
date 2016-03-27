@@ -9,6 +9,6 @@ RUN	apt-get install -qqy libcurl4-openssl-dev git make automake
 
 RUN	git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
-RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make; make install
+RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
-ENTRYPOINT	["minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
+ENTRYPOINT	["/cpuminer-multi/minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
