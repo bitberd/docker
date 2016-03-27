@@ -11,4 +11,4 @@ RUN	git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
 RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
-ENTRYPOINT	["/cpuminer-multi/minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
+ENTRYPOINT /cpuminer-multi/minerd -a cryptonight -o $POOL -u $WALLET -p x
