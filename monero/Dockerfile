@@ -9,12 +9,8 @@ ENV POOL stratum+tcp://xmr.crypto-pool.fr:3333
 RUN	apt-get update -qq
 RUN	apt-get install -qqy libcurl4-openssl-dev git make automake
 
-WORKDIR		/
-RUN		git clone https://github.com/wolf9466/cpuminer-multi
-WORKDIR		/cpuminer-multi
+RUN	git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
-RUN	./autogen.sh
-RUN	./configure
-RUN	make
+RUN	cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
 ENTRYPOINT	["/cpuminer-multi/minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
