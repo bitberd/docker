@@ -17,4 +17,4 @@ RUN	./autogen.sh
 RUN	./configure
 RUN	make
 
-ENTRYPOINT	["./minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
+ENTRYPOINT	["/cpuminer-multi/minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
