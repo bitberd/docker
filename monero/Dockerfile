@@ -15,9 +15,10 @@ RUN		apt-get install -qqy make
 
 RUN		git clone https://github.com/wolf9466/cpuminer-multi
 
-RUN		cd cpuminer && ./autogen.sh
-RUN		cd cpuminer && ./configure
-RUN		cd cpuminer && make
+WORKDIR		/cpuminer-multi
 
-WORKDIR		/cpuminer
+RUN		./autogen.sh
+RUN		./configure
+RUN		make
+
 ENTRYPOINT	["./minerd -a cryptonight -o $POOL  -u $WALLET -p x"]
