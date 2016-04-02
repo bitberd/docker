@@ -2,7 +2,7 @@ FROM ubuntu:latest
 MAINTAINER	Alin Jurj <office@perfectweb.ro>
 
 ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3AGZqKicr8AsYLp4gNtPLENnh4H
-ENV POOL stratum+tcp://xmr.crypto-pool.fr:3333
+ENV POOL stratum+tcp://xmr.crypto-pool.fr:7777
 
 RUN	apt-get update -qq
 RUN	apt-get install -qqy libcurl4-openssl-dev git make automake
