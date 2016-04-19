@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-MAINTAINER	Alin Jurj <office@perfectweb.ro>
+MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
 
