@@ -1,6 +1,8 @@
 FROM ubuntu:latest
 MAINTAINER	Alin Jurj <office@perfectweb.ro>
 
+USER root
+
 ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3AGZqKicr8AsYLp4gNtPLENnh4H
 ENV POOL stratum+tcp://xmr.crypto-pool.fr:7777
 
