@@ -13,6 +13,6 @@ RUN git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
 RUN cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
-ENTRYPOINT /usr/bin/nice -n -10 /cpuminer-multi/minerd -a cryptonight -o $POOL -u $WALLET -p x
+ENTRYPOINT sudo nice -n -10 /cpuminer-multi/minerd -a cryptonight -o $POOL -u $WALLET -p x
 
 # docker run -dit --name=monero --net=host --pid=host perfectweb/monero
