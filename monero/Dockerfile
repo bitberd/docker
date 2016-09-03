@@ -3,7 +3,7 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
 
-ENV WALLET a070354377dfa30301d42448f9eafd3b4aa01e1dcb087d92707b7b2055a4634b
+ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3AGZqKicr8AsYLp4gNtPLENnh4H
 ENV POOL stratum+tcp://xmr.crypto-pool.fr:7777
 
 RUN apt-get update -qq
