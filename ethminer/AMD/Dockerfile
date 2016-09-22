@@ -1,4 +1,4 @@
-FROM nvidia/cuda:7.5-devel-ubuntu14.04
+FROM ubuntu:14.04
 
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
