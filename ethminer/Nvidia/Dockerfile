@@ -6,8 +6,8 @@ WORKDIR /
 
 RUN add-apt-repository -y ppa:ethereum/ethereum \
     && apt-get update \
-    && apt-get -y install software-properties-common \
-    && apt-get install -y git \
+    && apt-get install -y software-properties-common\
+     git \
      cmake \
      libcryptopp-dev \
      libleveldb-dev \
