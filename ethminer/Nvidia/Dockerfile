@@ -1,12 +1,12 @@
-FROM nvidia/cuda:7.5-devel-ubuntu14.04
+FROM nvidia/cuda:8.0-devel-ubuntu14.04
 
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 WORKDIR /
 
-RUN apt-get -y install software-properties-common \
-    && add-apt-repository -y ppa:ethereum/ethereum \
+RUN add-apt-repository -y ppa:ethereum/ethereum \
     && apt-get update \
+    && apt-get -y install software-properties-common \
     && apt-get install -y git \
      cmake \
      libcryptopp-dev \
@@ -27,7 +27,7 @@ RUN git clone https://github.com/Genoil/cpp-ethereum/ \
     && cd cpp-ethereum \
     && mkdir build \
     && cd build \
-    && cmake -DBUNDLE=miner .. \
+    && cmake -DBUNDLE=cudaminer .. \
     && make -j8
 
 
