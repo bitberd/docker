@@ -30,7 +30,8 @@ RUN git clone https://github.com/Genoil/cpp-ethereum/ \
     && mkdir build \
     && cd build \
     && cmake -DBUNDLE=cudaminer .. \
-    && make -j8
+    && make -j8 \
+    && mkdir /data
 
 
 ENV GPU_FORCE_64BIT_PTR=0
@@ -39,4 +40,4 @@ ENV GPU_USE_SYNC_OBJECTS=1
 ENV GPU_MAX_ALLOC_PERCENT=100
 ENV GPU_SINGLE_ALLOC_PERCENT=100
 
-ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer"]
+ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer", "--farm-recheck", "200", "-U" , "-E", "old", "-R", "/data"]
