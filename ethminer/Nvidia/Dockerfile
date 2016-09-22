@@ -4,9 +4,10 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 WORKDIR /
 
-RUN add-apt-repository -y ppa:ethereum/ethereum \
+RUN apt-get update \
+    && apt-get install -y software-properties-common \
+    && add-apt-repository -y ppa:ethereum/ethereum \
     && apt-get update \
-    && apt-get install -y software-properties-common\
      git \
      cmake \
      libcryptopp-dev \
