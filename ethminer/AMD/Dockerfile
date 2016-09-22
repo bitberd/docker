@@ -4,10 +4,10 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 WORKDIR /
 
-RUN apt-get -y install software-properties-common \
-    && add-apt-repository -y ppa:ethereum/ethereum \
+RUN add-apt-repository -y ppa:ethereum/ethereum \
     && apt-get update \
-    && apt-get install -y git \
+    && apt-get install -y software-properties-common\
+     git \
      cmake \
      libcryptopp-dev \
      libleveldb-dev \
