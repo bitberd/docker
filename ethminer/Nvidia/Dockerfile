@@ -1,8 +1,12 @@
-FROM nvidia/cuda:7.5-devel-ubuntu14.04
+FROM ubuntu:14.04
 
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 WORKDIR /
+
+RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/cuda-repo-ubuntu1404_7.5-18_amd64.deb \
+    && sudo dpkg -i cuda-repo-ubuntu1404_7.5-18_amd64.deb \
+    && rm -f cuda-repo-ubuntu1404_7.5-18_amd64.deb
 
 RUN apt-get update \
     && apt-get install -y software-properties-common \
@@ -23,7 +27,8 @@ RUN apt-get update \
      opencl-headers \
      mesa-common-dev \
      libmicrohttpd-dev \
-     build-essential
+     build-essential \
+     cuda
 
 RUN git clone https://github.com/Genoil/cpp-ethereum/ \
     && cd cpp-ethereum \
