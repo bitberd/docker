@@ -15,4 +15,4 @@ RUN cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
 ENTRYPOINT nice -n -10 /cpuminer-multi/minerd -a cryptonight -o $POOL -u $WALLET -p x
 
-# docker run -dit --name=monero --net=host --pid=host --restart=always perfectweb/monero
+# docker run -dit --name=monero --privileged=true --net=host --pid=host --restart=always perfectweb/monero
