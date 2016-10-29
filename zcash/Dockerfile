@@ -8,10 +8,10 @@ ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
 ENV POOL eu1-zcash.flypool.org:3333
 
 RUN apt-get update -qq
-RUN apt-get install -qqy qt5-default git make wget g++
+RUN apt-get install -qqy qt5-default git make wget g++ cmake build-essential libboost-all-dev
 
 RUN git clone https://github.com/nicehash/nheqminer.git
-RUN cd /nheqminer; git checkout tags/0.3a ; mkdir build ; cd build ; qmake ../nheqminer/nheqminer.pro ; make
+RUN cd /nheqminer/nheqminer; git checkout tags/0.3a ; mkdir build ; cd build ; make .. ; make
 
 ENTRYPOINT /nheqminer/build/nheqminer -l $POOL -u $WALLET.$(hostname)
 
