@@ -10,7 +10,7 @@ ENV POOL eu1-zcash.flypool.org:3333
 RUN apt-get update -qq
 RUN apt-get install -qqy qt5-default git make wget g++
 
-RUN git clone https://github.com/etherchain-org/nheqminer.git
+RUN git clone https://github.com/nicehash/nheqminer.git
 RUN cd /nheqminer; git checkout tags/0.3a ; mkdir build ; cd build ; qmake ../nheqminer/nheqminer.pro ; make
 
 ENTRYPOINT /nheqminer/build/nheqminer -l $POOL -u $WALLET.$(hostname)
