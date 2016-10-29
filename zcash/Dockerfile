@@ -18,7 +18,7 @@ RUN mkdir -p ~/.zcash ; echo "addnode=mainnet.z.cash" >~/.zcash/zcash.conf ; ech
 RUN echo "genproclimit=$(nproc)" >> ~/.zcash/zcash.conf ; echo 'equihashsolver=tromp' >> ~/.zcash/zcash.conf ; echo 'equihashsolver=tromp' >> ~/.zcash/zcash.conf
 
 RUN git clone https://github.com/etherchain-org/nheqminer.git
-RUN cd /nheqminer; mkdir build ; cd build ; qmake ../nheqminer/nheqminer.pro ; make ; chmod a+x ./nheqminer
+RUN cd /nheqminer; mkdir build ; cd build ; qmake ../nheqminer/nheqminer.pro ; make ; chmod 0777 ./nheqminer
 
 ENTRYPOINT zcashd -daemon ; ./nheqminer -l $POOL -u $WALLET.zcash
 
