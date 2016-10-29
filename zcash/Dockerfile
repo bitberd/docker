@@ -7,9 +7,10 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
 ENV POOL eu1-zcash.flypool.org:3333
 
-RUN echo "deb https://apt.z.cash/ jessie main" | tee /etc/apt/sources.list.d/zcash.list
 RUN apt-get update -qq
 RUN apt-get install -qqy apt-transport-https qt5-default git make wget
+RUN echo "deb https://apt.z.cash/ jessie main" | tee /etc/apt/sources.list.d/zcash.list
+RUN apt-get update -qq
 RUN wget -qO - https://apt.z.cash/zcash.asc | apt-key add -
 RUN apt-get install -qqy zcash
 
