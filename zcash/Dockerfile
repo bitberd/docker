@@ -4,7 +4,9 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 USER root
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
+
+#bitcoin wallet for nicehash
+ENV WALLET 1Jf5TEWkkUNjLe8EBJxEKsiKmUcF3eG8sY
 
 RUN apt-get update -qq
 RUN apt-get install -qqy qt5-default git make wget g++ cmake build-essential libboost-all-dev
