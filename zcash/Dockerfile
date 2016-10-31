@@ -14,6 +14,7 @@ RUN apt-get install -qqy qt5-default git make wget g++ cmake build-essential lib
 RUN git clone -b Linux https://github.com/nicehash/nheqminer.git
 RUN cd nheqminer/cpu_xenoncat/Linux/asm/ && sh assemble.sh && cd ../../../Linux_cmake/nheqminer_cpu && cmake . && make
 
-ENTRYPOINT /nheqminer/nheqminer/build/nheqminer -u $WALLET
+ENTRYPOINT bash
+#ENTRYPOINT /nheqminer/nheqminer/build/nheqminer -u $WALLET
 
 # docker run -dit --name=zcash --net=host --restart=always perfectweb/zcash
