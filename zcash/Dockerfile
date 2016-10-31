@@ -11,8 +11,8 @@ ENV WALLET 1Jf5TEWkkUNjLe8EBJxEKsiKmUcF3eG8sY
 RUN apt-get update -qq
 RUN apt-get install -qqy qt5-default git make wget g++ cmake build-essential libboost-all-dev
 
-RUN git clone https://github.com/nicehash/nheqminer.git
-RUN cd /nheqminer/nheqminer; git checkout Linux ; mkdir build ; cd build ; cmake .. ; make
+RUN git clone -b Linux https://github.com/nicehash/nheqminer.git
+RUN cd nheqminer/cpu_xenoncat/Linux/asm/ && sh assemble.sh && cd ../../../Linux_cmake/nheqminer_cpu && cmake . && make
 
 ENTRYPOINT /nheqminer/nheqminer/build/nheqminer -u $WALLET
 
