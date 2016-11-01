@@ -4,15 +4,16 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 USER root
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
-ENV POOL eu1-zcash.flypool.org:3333
 
 RUN apt-get update -qq
-RUN apt-get install -qqy qt5-default git make wget g++ cmake build-essential libboost-all-dev
+RUN apt-get install -qqy apt-transport-https git make wget g++
+RUN echo "deb https://apt.z.cash/ jessie main" | tee /etc/apt/sources.list.d/zcash.list
+RUN apt-get update -qq
+RUN wget -qO - https://apt.z.cash/zcash.asc | apt-key add -
+RUN apt-get install -qqy --allow-unauthenticated zcash
 
-RUN git clone https://github.com/etherchain-org/nheqminer.git
-RUN cd /nheqminer; mkdir build ; cd build ; qmake ../nheqminer/nheqminer.pro ; make
+RUN mkdir -p ~/.zcash ; echo "addnode=mainnet.z.cash" >~/.zcash/zcash.conf ; echo "rpcuser=perfectzcash" >>~/.zcash/zcash.conf ; echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >>~/.zcash/zcash.conf
 
-ENTRYPOINT /nheqminer/build/nheqminer -l $POOL -u $WALLET.$(hostname)
+ENTRYPOINT zcashd
 
-# docker run -dit --name=zcash --net=host --restart=always perfectweb/zcash
+# docker run -dit --name=zcash_node --net=host --restart=always perfectweb/zcash:node
