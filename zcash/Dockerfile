@@ -13,6 +13,7 @@ RUN wget -qO - https://apt.z.cash/zcash.asc | apt-key add -
 RUN apt-get install -qqy --allow-unauthenticated zcash
 
 RUN mkdir -p ~/.zcash ; echo "addnode=mainnet.z.cash" >~/.zcash/zcash.conf ; echo "rpcuser=perfectzcash" >>~/.zcash/zcash.conf ; echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >>~/.zcash/zcash.conf
+RUN zcash-fetch-params
 
 ENTRYPOINT zcashd
 
