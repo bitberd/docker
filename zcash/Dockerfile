@@ -12,10 +12,9 @@ RUN apt-get update -qq
 RUN wget -qO - https://apt.z.cash/zcash.asc | apt-key add -
 RUN apt-get install -qqy --allow-unauthenticated zcash
 
-RUN mkdir -p ~/.zcash ; echo "addnode=mainnet.z.cash" >~/.zcash/zcash.conf ; echo "rpcuser=perfectzcash" >>~/.zcash/zcash.conf ; echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >>~/.zcash/zcash.conf ; echo 'gen=1' >> ~/.zcash/zcash.conf ; echo 'equihashsolver=tromp' >> ~/.zcash/zcash.conf
+RUN mkdir -p ~/.zcash ; echo "addnode=mainnet.z.cash" >~/.zcash/zcash.conf ; echo "rpcuser=perfectzcash" >>~/.zcash/zcash.conf ; echo "rpcpassword=`head -c 32 /dev/urandom | base64`" >>~/.zcash/zcash.conf ; echo 'gen=1' >> ~/.zcash/zcash.conf ; echo 'equihashsolver=tromp' >> ~/.zcash/zcash.conf ; echo "genproclimit=`nproc`" >> ~/.zcash/zcash.conf
 RUN zcash-fetch-params
-
 
 ENTRYPOINT zcashd
 
-# docker run -dit -v /root/zcash:/root/.zcash --name=zcash_node --net=host --restart=always perfectweb/zcash:node
+# docker run -dit --name=zcash_node --net=host --restart=always perfectweb/zcash:node
