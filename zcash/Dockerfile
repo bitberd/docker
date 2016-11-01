@@ -18,4 +18,4 @@ RUN zcash-fetch-params
 
 ENTRYPOINT zcashd
 
-# docker run -dit -v /root/.zcash:/root/.zcash --name=zcash_node --net=host --restart=always perfectweb/zcash:node
+# docker run -dit -v /root/zcash:/root/.zcash --name=zcash_node --net=host --restart=always perfectweb/zcash:node
