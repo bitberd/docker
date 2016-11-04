@@ -8,7 +8,7 @@ ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
 ENV POOL zec-eu1.nanopool.org:6666
 
 RUN apt-get update -qq
-RUN apt-get install -qqy cmake build-essential libboost-all-dev
+RUN apt-get install -qqy cmake build-essential libboost-all-dev git
 
 RUN git clone -b Linux https://github.com/etherchain-org/nheqminer.git
 RUN cd nheqminer/Linux_cmake/nheqminer_cuda_tromp && cmake . && make -j $(nproc)
