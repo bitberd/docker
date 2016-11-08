@@ -1,12 +1,8 @@
-FROM ubuntu:14.04
+FROM nvidia/cuda:8.0
 
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 WORKDIR /
-
-RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/cuda-repo-ubuntu1404_7.5-18_amd64.deb \
-    && sudo dpkg -i cuda-repo-ubuntu1404_7.5-18_amd64.deb \
-    && rm -f cuda-repo-ubuntu1404_7.5-18_amd64.deb
 
 RUN apt-get update \
     && apt-get install -y software-properties-common \
@@ -27,8 +23,7 @@ RUN apt-get update \
      opencl-headers \
      mesa-common-dev \
      libmicrohttpd-dev \
-     build-essential \
-     cuda
+     build-essential
 
 RUN git clone https://github.com/Genoil/cpp-ethereum/ \
     && cd cpp-ethereum \
@@ -44,4 +39,4 @@ ENV GPU_USE_SYNC_OBJECTS=1
 ENV GPU_MAX_ALLOC_PERCENT=100
 ENV GPU_SINGLE_ALLOC_PERCENT=100
 
-ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer", "--farm-recheck", "200", "-U" ]
+ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer", "-U" ]
