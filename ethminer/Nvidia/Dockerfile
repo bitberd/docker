@@ -2,6 +2,8 @@ FROM nvidia/cuda:8.0
 
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 WORKDIR /
 
 RUN apt-get update \
