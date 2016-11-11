@@ -62,4 +62,4 @@ ENV GPU_SINGLE_ALLOC_PERCENT=100
 # cleanup
 RUN apt-get clean ; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
 
-ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer", "-U"]
+ENTRYPOINT ["/cpp-ethereum/build/ethminer/ethminer"]
