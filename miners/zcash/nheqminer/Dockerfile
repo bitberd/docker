@@ -15,4 +15,4 @@ RUN cd nheqminer/Linux_cmake/nheqminer_cuda_tromp && cmake . && make -j $(nproc)
 
 ENTRYPOINT /nheqminer/Linux_cmake/nheqminer_cuda_tromp -l $POOL -u $WALLET.$(hostname)
 
-# nvidia-docker run -dit --name=zcash --restart=always perfectweb/zcash
+# nvidia-docker run -dit --name=zcash --net=host --restart=always perfectweb/zcash
