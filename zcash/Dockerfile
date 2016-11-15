@@ -5,7 +5,7 @@ USER root
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
-ENV POOL zec-eu1.nanopool.org:6666
+ENV POOL eu1-zcash.flypool.org:3333
 
 RUN apt-get update -qq
 RUN apt-get install -qqy cmake build-essential libboost-all-dev git
