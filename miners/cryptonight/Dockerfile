@@ -16,4 +16,4 @@ RUN cd /cpuminer-multi; ./autogen.sh; ./configure; make
 ENTRYPOINT ["/cpuminer-multi/minerd"]
 CMD ["-a cryptonight -o $POOL -u $WALLET -p x"]
 
-# docker run -dit --name=monero --restart=always perfectweb/bytecoin:monero
+# docker run -dit --name=monero --restart=always perfectweb/cryptonight:cpumultiminer
