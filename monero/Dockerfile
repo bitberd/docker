@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:16.04
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
@@ -13,6 +13,7 @@ RUN git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
 RUN cd /cpuminer-multi; ./autogen.sh; ./configure; make
 
-ENTRYPOINT nice -n -10 /cpuminer-multi/minerd -a cryptonight -o $POOL -u $WALLET -p x
+ENTRYPOINT ["/cpuminer-multi/minerd"]
+CMD ["-a cryptonight -o $POOL -u $WALLET -p x"]
 
-# docker run -dit --name=monero --privileged=true --net=host --pid=host --restart=always perfectweb/monero
+# docker run -dit --name=monero --restart=always perfectweb/bytecoin:monero
