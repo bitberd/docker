@@ -7,7 +7,7 @@ ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3
 ENV POOL stratum+tcp://xmr.crypto-pool.fr:7777
 
 RUN apt-get update -qq
-RUN apt-get install -qqy libcurl4-openssl-dev git make automake
+RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc
 
 RUN git clone https://github.com/wolf9466/cpuminer-multi /cpuminer-multi
 
