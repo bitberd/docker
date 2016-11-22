@@ -53,7 +53,7 @@ ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs:${LIBRARY_PATH}
 RUN apt-get install -y git cmake libcryptopp-dev libleveldb-dev libargtable2-dev libjsoncpp-dev libjsonrpccpp-dev libboost-all-dev libgmp-dev libreadline-dev libcurl4-gnutls-dev ocl-icd-libopencl1 opencl-headers mesa-common-dev libmicrohttpd-dev build-essential libpthread-stubs0-dev cpuid
 RUN git clone https://github.com/Genoil/cpp-ethereum/ && cd cpp-ethereum && mkdir build && cd build && cmake -DBUNDLE=cudaminer .. && make -j8
 
-ENV GPU_FORCE_64BIT_PTR=0
+ENV GPU_FORCE_64BIT_PTR=1
 ENV GPU_MAX_HEAP_SIZE=100
 ENV GPU_USE_SYNC_OBJECTS=1
 ENV GPU_MAX_ALLOC_PERCENT=100
