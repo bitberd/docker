@@ -10,7 +10,6 @@ ENV GPU_MAX_ALLOC_PERCENT=100
 ENV GPU_SINGLE_ALLOC_PERCENT=100
 
 RUN apt-get update && apt-get install -y curl libcurlpp-dev
-RUN ln -s /usr/local/cuda-8.0/targets/x86_64-linux/lib/libOpenCL.so.1.0.0 /usr/local/cuda-8.0/targets/x86_64-linux/lib/libOpenCL.so.1
 
 COPY . /claymore
 
