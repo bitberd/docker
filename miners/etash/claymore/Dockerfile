@@ -3,6 +3,8 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+
 ENV GPU_FORCE_64BIT_PTR=1
 ENV GPU_MAX_HEAP_SIZE=100
 ENV GPU_USE_SYNC_OBJECTS=1
