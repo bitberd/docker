@@ -6,7 +6,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /
 
+# do not forget this label as it is important for the nvidia-docker to mount the driver files
 LABEL com.nvidia.volumes.needed="nvidia_driver"
+LABEL com.nvidia.cuda.version="8.0"
 
 RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
     NVIDIA_GPGKEY_FPR=ae09fe4bbd223a84b2ccfce3f60f4b3d7fa2af80 && \
@@ -17,8 +19,6 @@ RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efac
 
 ENV CUDA_VERSION 8.0
 ENV CUDA_PKG_VERSION 8-0=8.0.44-1
-
-LABEL com.nvidia.cuda.version="8.0"
 
 RUN apt-get update && apt-get install -y software-properties-common  && add-apt-repository -y ppa:ethereum/ethereum && apt-get update
 
