@@ -1,19 +1,4 @@
-FROM ubuntu:16.04
-MAINTAINER Alin Jurj <office@perfectweb.ro>
-
-ENV DEBIAN_FRONTEND noninteractive
-
-# do not forget this label as it is important for the nvidia-docker to mount the driver files
-LABEL com.nvidia.volumes.needed="nvidia_driver"
-LABEL com.nvidia.cuda.version="8.0"
-
-ENV GPU_FORCE_64BIT_PTR=1
-ENV GPU_MAX_HEAP_SIZE=100
-ENV GPU_USE_SYNC_OBJECTS=1
-ENV GPU_MAX_ALLOC_PERCENT=100
-ENV GPU_SINGLE_ALLOC_PERCENT=100
-
-RUN apt-get update && apt-get install -y curl libcurlpp-dev
+FROM perfectweb/etash:genoil
 
 COPY . /claymore
 
