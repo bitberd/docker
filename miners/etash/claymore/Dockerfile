@@ -3,6 +3,7 @@ MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# do not forget this label as it is important for the nvidia-docker to mount the driver files
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 
 ENV GPU_FORCE_64BIT_PTR=1
