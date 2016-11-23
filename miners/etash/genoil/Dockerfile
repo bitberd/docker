@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -36,7 +35,9 @@ RUN apt-get install -y --no-install-recommends \
         cuda-cusparse-dev-$CUDA_PKG_VERSION \
         cuda-npp-dev-$CUDA_PKG_VERSION \
         cuda-cudart-dev-$CUDA_PKG_VERSION \
-        cuda-driver-dev-$CUDA_PKG_VERSION && \
+        cuda-driver-dev-$CUDA_PKG_VERSION \
+        curl \
+        libcurlpp-dev && \
     ln -s cuda-$CUDA_VERSION /usr/local/cuda
 
 RUN echo "/usr/local/cuda/lib" >> /etc/ld.so.conf.d/cuda.conf && \
