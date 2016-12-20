@@ -16,7 +16,7 @@ RUN cd /wolf-xmr-miner && make
 ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3AGZqKicr8AsYLp4gNtPLENnh4H
 ENV POOL xmr.crypto-pool.fr:7777
 
-ENTRYPOINT ["/wolf-xmr-miner"]
+ENTRYPOINT ["/wolf-xmr-miner/miner"]
 CMD ["-a cryptonight -o stratum+tcp://$POOL -u $WALLET -p x"]
 
-# docker run -dit --name=monero-gpu --restart=always perfectweb/cryptonight:cpumultiminer
+# docker run -dit --name=monero-gpu --restart=always perfectweb/cryptonight:wolf
