@@ -14,7 +14,9 @@ ENV POOL_PORT 6666
 
 RUN curl https://raw.githubusercontent.com/Optiminer/OptiminerZcash/master/optiminer-zcash-1.1.0.tar.gz | tar xz
 
-ENTRYPOINT ["/optiminer-zcash/optiminer-zcash"]
+WORKDIR /optiminer-zcash
+
+ENTRYPOINT ["./optiminer-zcash"]
 CMD ["-s $POOL_HOSTNAME:$POOL_PORT -u $WALLET.default -p x"]
 
 # docker run -dit --name=zcash-optiminer --restart=always perfectweb/equihash:optiminer
