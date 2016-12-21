@@ -16,6 +16,10 @@ RUN curl https://raw.githubusercontent.com/Optiminer/OptiminerZcash/master/optim
 
 WORKDIR /optiminer-zcash
 
+# do not forget this label as it is important for the nvidia-docker to mount the driver files
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+LABEL com.nvidia.cuda.version="8.0"
+
 ENTRYPOINT ["./optiminer-zcash"]
 CMD ["-s $POOL_HOSTNAME:$POOL_PORT -u $WALLET.default -p x"]
 
