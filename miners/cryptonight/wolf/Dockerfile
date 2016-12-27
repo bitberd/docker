@@ -26,8 +26,8 @@ COPY xmr.conf.tpl /wolf-xmr-miner/
 COPY entrypoint.sh /wolf-xmr-miner/
 RUN chmod +x /wolf-xmr-miner/entrypoint.sh
 
-ENTRYPOINT ["/wolf-xmr-miner/entrypoint.sh"]
-#ENTRYPOINT ["/wolf-xmr-miner/miner"]
-#CMD ["-a cryptonight -o stratum+tcp://$POOL -u $WALLET -p x"]
+WORKDIR /wolf-xmr-miner/
+
+ENTRYPOINT ["entrypoint.sh"]
 
 # docker run -dit --name=monero-gpu --restart=always perfectweb/cryptonight:wolf
