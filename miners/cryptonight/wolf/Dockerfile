@@ -28,6 +28,6 @@ RUN chmod +x /wolf-xmr-miner/entrypoint.sh
 
 WORKDIR /wolf-xmr-miner/
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/wolf-xmr-miner/entrypoint.sh"]
 
 # docker run -dit --name=monero-gpu --restart=always perfectweb/cryptonight:wolf
