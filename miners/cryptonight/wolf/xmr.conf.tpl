@@ -15,7 +15,7 @@
                         "pools":
                         [
                                 {
-                                        "url": "{protocol}://{hostname}:{port}",
+                                        "url": "{protocol}://{poolhostname}:{port}",
                                         "user": "{wallet}",
                                         "pass": "{password}"
                                 }
