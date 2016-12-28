@@ -1,5 +1,4 @@
-FROM ubuntu:16.04
-
+FROM perfectweb/ethash:genoil
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
@@ -7,21 +6,14 @@ WORKDIR /
 
 RUN apt-get update -qq
 RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc
+RUN apt-get install -qqy g++ libssl-dev
 
-RUN git clonehttps://github.com/tpruvot/ccminer.git
+RUN git clone https://github.com/tpruvot/ccminer.git
 RUN cd /ccminer && ./build.sh
 
-ENV WALLET 45o3GNggqZcRuCRGYBLuM4LckUcFsv2TsPXJHAmtkTwrhKams736iicEu5dKvQSNZcDR3AGZqKicr8AsYLp4gNtPLENnh4H
-ENV PASSWORD x
-ENV POOLHOSTNAME xmr.crypto-pool.fr
-ENV PROTOCOL stratum+tcp
-ENV PORT 7777
-ENV THREADS 1
-ENV RAWINTENSITY 670
-ENV WORKSIZE 8
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+LABEL com.nvidia.cuda.version="8.0"
 
-#RUN chmod +x /wolf-xmr-miner/entrypoint.sh
+ENTRYPOINT ["/ccminer/ccminer"]
 
-#WORKDIR /wolf-xmr-miner/
-
-ENTRYPOINT ["bash"]
+# @todo remove genoil as dependecy when cuda on ubuntu 16.04 is released
