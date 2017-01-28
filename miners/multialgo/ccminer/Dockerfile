@@ -15,5 +15,6 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 LABEL com.nvidia.cuda.version="8.0"
 
 ENTRYPOINT ["/ccminer/ccminer"]
+CMD ["-a", "lbry", "-o", "stratum+tcp://lbry.suprnova.cc:6256", "-u", "dual", "-p", "x"]
 
 # @todo remove genoil as dependecy when cuda on ubuntu 16.04 is released
