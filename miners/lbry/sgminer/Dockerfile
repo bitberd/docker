@@ -1,13 +1,7 @@
-FROM ubuntu:16.04
+FROM perfectweb/base:base-v1
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
-USER root
-WORKDIR /
-
 RUN apt-get update -qq
-#RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc
-#RUN apt-get install -qqy g++ libssl-dev
-#RUN apt-get install -qqy pkg-config libtool libncurses5-dev autoconf
 RUN apt-get install -qqy libcurl4-openssl-dev pkg-config libtool libcurl3-gnutls
 
 ADD lbrycrd-gpu /lbrycrd-gpu
