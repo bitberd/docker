@@ -1,9 +1,6 @@
 FROM perfectweb/base:cuda-8.0-devel-ubuntu16.04-v1
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
-USER root
-WORKDIR /
-
 RUN git clone https://github.com/tpruvot/ccminer.git
 RUN cd /ccminer && ./build.sh
 
