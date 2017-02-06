@@ -1,12 +1,11 @@
-FROM perfectweb/ethash:genoil
+FROM 8.0-runtime-ubuntu16.04
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
 USER root
 WORKDIR /
 
 RUN apt-get update -qq
-RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc
-RUN apt-get install -qqy g++ libssl-dev
+RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc g++ libssl-dev libcurl4-openssl-dev
 
 RUN git clone https://github.com/tpruvot/ccminer.git
 RUN cd /ccminer && ./build.sh
