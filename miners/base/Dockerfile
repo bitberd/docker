@@ -9,4 +9,4 @@ ENV GPU_MAX_ALLOC_PERCENT=100
 ENV GPU_SINGLE_ALLOC_PERCENT=100
 
 RUN apt-get update -qq
-RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc g++ libssl-dev pkg-config libtool autoconf libcurl3-gnutls
+RUN apt-get install -qqy libcurl4-openssl-dev git make automake gcc g++ libssl-dev pkg-config libtool autoconf libcurl3-gnutls wget
