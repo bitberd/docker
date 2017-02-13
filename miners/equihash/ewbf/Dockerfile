@@ -1,19 +1,8 @@
-FROM ubuntu:16.04
-
+FROM perfectweb/base:cuda-8.0-devel-ubuntu16.04-v1
 MAINTAINER Alin Jurj <office@perfectweb.ro>
 
-USER root
-WORKDIR /
-
 COPY miner /
-
-ENV WALLET t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3
-ENV POOL_HOSTNAME zec-eu1.nanopool.org
-ENV POOL_PORT 6666
-
 RUN chmod 0777 /miner
 
 ENTRYPOINT ["/miner"]
-CMD ["--server $POOL_HOSTNAME --user $WALLET.default --pass z --port $POOL_PORT"]
-
-# docker run -dit --name=zcash-cuda --restart=always perfectweb/equihash:ewbf
+CMD ["--server zec-eu1.nanopool.org --user t1eiBzTHA6yjMT1gkpJw4Q4wMTGwqNHMeY3.default --pass z --port 6666"]
